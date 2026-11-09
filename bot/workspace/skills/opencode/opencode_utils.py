@@ -11,11 +11,17 @@ import traceback
 from opencode_ai import Opencode
 
 
-def execute_cmd(cmd):
+def execute_cmd(cmd, cwd=None):
+    """执行命令（参数列表，不经过 shell，避免注入 / bandit.B602）。
+
+    cmd: 参数列表，例如 ["opencode", "session", "list", "--format=json"]
+    cwd: 可选工作目录
+    """
     try:
         result = subprocess.run(
             cmd,
-            shell=True,
+            cwd=cwd,
+            shell=False,
             text=True,
             encoding="utf-8",
             stdout=subprocess.PIPE,

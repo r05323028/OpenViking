@@ -183,6 +183,7 @@ import argparse
 import io
 import json
 import os
+import shlex
 import sys
 import time
 import uuid
@@ -840,8 +841,8 @@ def run_full_test(
 
         try:
             result = subprocess.run(
-                gateway_restart_cmd,
-                shell=True,
+                shlex.split(gateway_restart_cmd, posix=(os.name != "nt")),
+                shell=False,
                 capture_output=True,
                 text=True,
                 timeout=60,
